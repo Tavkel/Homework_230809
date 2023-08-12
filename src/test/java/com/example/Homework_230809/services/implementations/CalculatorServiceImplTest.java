@@ -10,6 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Random;
 import java.util.stream.Stream;
 
+import static com.example.Homework_230809.services.implementations.TestData.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CalculatorServiceImplTest {
@@ -17,40 +18,42 @@ class CalculatorServiceImplTest {
 
     public static Stream<Arguments> provideParametersForAdditionTests() {
         return Stream.of(
-                Arguments.of(TestData.NUM1, TestData.NUM1, TestData.ADDITION_RESULT11),
+                Arguments.of(NUM1, NUM1, ADDITION_RESULT11),
 
-                Arguments.of(TestData.NUM1, TestData.NUM2, TestData.ADDITION_RESULT12),
-                Arguments.of(TestData.NUM2, TestData.NUM1, TestData.ADDITION_RESULT12),
+                Arguments.of(NUM1, NUM2, ADDITION_RESULT12),
+                Arguments.of(NUM2, NUM1, ADDITION_RESULT12),
 
-                Arguments.of(TestData.NUM1, TestData.NUM3, TestData.ADDITION_RESULT13),
-                Arguments.of(TestData.NUM3, TestData.NUM1, TestData.ADDITION_RESULT13),
+                Arguments.of(NUM1, NUM3, ADDITION_RESULT13),
+                Arguments.of(NUM3, NUM1, ADDITION_RESULT13),
 
-                Arguments.of(TestData.NUM2, TestData.NUM2, TestData.ADDITION_RESULT22),
+                Arguments.of(NUM2, NUM2, ADDITION_RESULT22),
 
-                Arguments.of(TestData.NUM2, TestData.NUM3, TestData.ADDITION_RESULT23),
-                Arguments.of(TestData.NUM3, TestData.NUM2, TestData.ADDITION_RESULT23),
+                Arguments.of(NUM2, NUM3, ADDITION_RESULT23),
+                Arguments.of(NUM3, NUM2, ADDITION_RESULT23),
 
-                Arguments.of(TestData.NUM3, TestData.NUM3, TestData.ADDITION_RESULT33)
+                Arguments.of(NUM3, NUM3, ADDITION_RESULT33)
         );
     }
+
     public static Stream<Arguments> provideParametersForSubtractionTests() {
         return Stream.of(
-                Arguments.of(TestData.NUM1, TestData.NUM1, 0),
-                Arguments.of(TestData.NUM2, TestData.NUM2, 0),
-                Arguments.of(TestData.NUM3, TestData.NUM3, 0),
+                Arguments.of(NUM1, NUM1, 0),
+                Arguments.of(NUM2, NUM2, 0),
+                Arguments.of(NUM3, NUM3, 0),
 
-                Arguments.of(TestData.NUM1, TestData.NUM2, TestData.SUBTRACTION_RESULT12),
-                Arguments.of(TestData.NUM2, TestData.NUM1, TestData.SUBTRACTION_RESULT21),
+                Arguments.of(NUM1, NUM2, SUBTRACTION_RESULT12),
+                Arguments.of(NUM2, NUM1, SUBTRACTION_RESULT21),
 
-                Arguments.of(TestData.NUM1, TestData.NUM3, TestData.SUBTRACTION_RESULT13),
-                Arguments.of(TestData.NUM3, TestData.NUM1, TestData.SUBTRACTION_RESULT31),
+                Arguments.of(NUM1, NUM3, SUBTRACTION_RESULT13),
+                Arguments.of(NUM3, NUM1, SUBTRACTION_RESULT31),
 
 
-                Arguments.of(TestData.NUM2, TestData.NUM3, TestData.SUBTRACTION_RESULT23),
-                Arguments.of(TestData.NUM3, TestData.NUM2, TestData.SUBTRACTION_RESULT32)
+                Arguments.of(NUM2, NUM3, SUBTRACTION_RESULT23),
+                Arguments.of(NUM3, NUM2, SUBTRACTION_RESULT32)
 
         );
     }
+
     public static Stream<Arguments> provideParametersForMultiplicationTests() {
         Random rng = new Random();
         int randomInt = rng.nextInt();
@@ -58,76 +61,107 @@ class CalculatorServiceImplTest {
         return Stream.of(
                 Arguments.of(rng.nextInt(), 0, 0),
                 Arguments.of(randomInt, 1, randomInt),
-                Arguments.of(TestData.NUM1, TestData.NUM1, TestData.MULTIPLICATION_RESULT11),
-                Arguments.of(TestData.NUM2, TestData.NUM2, TestData.MULTIPLICATION_RESULT22),
-                Arguments.of(TestData.NUM3, TestData.NUM3, TestData.MULTIPLICATION_RESULT33),
+                Arguments.of(NUM1, NUM1, MULTIPLICATION_RESULT11),
+                Arguments.of(NUM2, NUM2, MULTIPLICATION_RESULT22),
+                Arguments.of(NUM3, NUM3, MULTIPLICATION_RESULT33),
 
-                Arguments.of(TestData.NUM2, TestData.NUM3, TestData.MULTIPLICATION_RESULT23),
-                Arguments.of(TestData.NUM3, TestData.NUM2, TestData.MULTIPLICATION_RESULT23)
+                Arguments.of(NUM2, NUM3, MULTIPLICATION_RESULT23),
+                Arguments.of(NUM3, NUM2, MULTIPLICATION_RESULT23)
+        );
+    }
+
+    public static Stream<Arguments> provideParametersForDivisionTests() {
+        return Stream.of(
+                Arguments.of(NUM2, NUM3, DIVISION_RESULT23),
+                Arguments.of(NUM3, NUM2, DIVISION_RESULT32)
         );
     }
 
     @Test
     void shouldReturnGreetingMessage() {
         String actual = sut.getGreetingMessage();
-        Assertions.assertEquals("Добро пожаловать в калькулятор", actual);
+        assertEquals("Добро пожаловать в калькулятор", actual);
     }
 
+    //region add
     @ParameterizedTest
     @MethodSource("provideParametersForAdditionTests")
-    void shouldAddTwoIntegers(int num1, int num2, int expectedResult) {
-        int actualResult = sut.add(num1, num2);
-        Assertions.assertEquals(expectedResult, actualResult);
+    void add_shouldAddTwoIntegers(int num1, int num2, int expectedResult) {
+        var actualResult = sut.add(num1, num2);
+        assertEquals(expectedResult, actualResult);
     }
 
+    @Test
+    void add_shouldAddTwosIntegers() {
+        assertEquals(4_000_000L, sut.add(2_000_000, 2_000_000));
+    }
+
+    @Test
+    void add_shouldThrowNullPointerException() {
+        assertThrows(NullPointerException.class, () -> sut.add(null, null));
+    }
+//endregion
+
+    //region subtract
     @ParameterizedTest
     @MethodSource("provideParametersForSubtractionTests")
-    void shouldSubtractTwoIntegers(int num1, int num2, int expectedResult) {
-        int actualResult = sut.subtract(num1, num2);
-        Assertions.assertEquals(expectedResult, actualResult);
+    void subtract_shouldSubtractTwoIntegers(int num1, int num2, int expectedResult) {
+        var actualResult = sut.subtract(num1, num2);
+        assertEquals(expectedResult, actualResult);
     }
 
+    @Test
+    void subtract_shouldSubtractTwosIntegers() {
+        assertEquals(-4_000_000L, sut.subtract(-2_000_000, 2_000_000));
+    }
+
+    @Test
+    void subtract_shouldThrowNullPointerException() {
+        assertThrows(NullPointerException.class, () -> sut.subtract(null, null));
+    }
+    //endregion
+
+    //region multiply
     @ParameterizedTest
     @MethodSource("provideParametersForMultiplicationTests")
-    void shouldMultiplyTwoIntegers(int num1, int num2, int expectedResult) {
-        int actualResult = sut.multiply(num1, num2);
-        Assertions.assertEquals(expectedResult, actualResult);
+    void multiply_shouldMultiplyTwoIntegers(int num1, int num2, int expectedResult) {
+        var actualResult = sut.multiply(num1, num2);
+        assertEquals(expectedResult, actualResult);
     }
 
     @Test
-    void shouldThrowIllegalArgumentExceptionOnDivisionByZeroAttempt() {
-        Random rng = new Random();
-        Assertions.assertThrows(IllegalArgumentException.class, () -> sut.divide(rng.nextInt(), 0));
+    void multiply_shouldMultiplyTwosIntegers() {
+        assertEquals(4_000_000_000_000L, sut.multiply(2_000_000, 2_000_000));
     }
 
     @Test
-    void ShouldDivideTwoIntegers(){
-        Assertions.assertEquals(TestData.DIVISION_RESULT23, sut.divide(TestData.NUM2, TestData.NUM3));
-        Random rng = new Random();
-        int num1 = rng.nextInt();
-        int num2;
-        do {
-            num2 = rng.nextInt();
-        } while (num2 == 0);
-
-        if (Math.abs(num1) < Math.abs(num2)){
-            Assertions.assertEquals(0, sut.divide(num1, num2));
-        } else if (num1 == num2) {
-            Assertions.assertEquals(1, sut.divide(num1, num2));
-        } else {
-            int expected = 0;
-            for(int i = Math.abs(num1); i > Math.abs(num2); i -= Math.abs(num2)){
-                expected++;
-            }
-            if (num1 < 0 ^ num2 < 0){
-                expected *= -1;
-            }
-            Assertions.assertEquals(expected, sut.divide(num1, num2));
-        }
+    void multiply_shouldThrowNullPointerException() {
+        assertThrows(NullPointerException.class, () -> sut.multiply(null, null));
     }
+    //endregion
+
+    //region divide
+    @ParameterizedTest
+    @MethodSource("provideParametersForDivisionTests")
+    void divide_ShouldDivideTwoIntegers(int num1, int num2, double expectedResult) {
+        var actualResult = sut.divide(num1, num2);
+        assertEquals(expectedResult, actualResult);
+    }
+
+    @Test
+    void divide_shouldDivideTwoIntegers() {
+        assertEquals(-2, sut.divide(-8, 4));
+    }
+
+    @Test
+    void divide_shouldThrowIllegalArgumentExceptionOnDivisionByZeroAttempt() {
+        int aNumber = 2;
+        assertThrows(IllegalArgumentException.class, () -> sut.divide(aNumber, 0));
+    }
+    //endregion
 }
 
-class TestData{
+class TestData {
     public static int NUM1 = 1;
     public static int NUM2 = 25;
     public static int NUM3 = 8;
@@ -150,5 +184,7 @@ class TestData{
     public static int MULTIPLICATION_RESULT23 = 200;
     public static int MULTIPLICATION_RESULT33 = 64;
 
-    public static int DIVISION_RESULT23 = 3;
+    public static double DIVISION_RESULT23 = 3.125;
+    public static double DIVISION_RESULT32 = 0.32;
+
 }

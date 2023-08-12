@@ -18,22 +18,22 @@ public class CalculatorController {
     }
 
     @GetMapping("/plus")
-    public Integer plus(@RequestParam Integer num1, @RequestParam Integer num2){
+    public Long plus(@RequestParam Integer num1, @RequestParam Integer num2){
         return calculatorService.add(num1, num2);
     }
 
     @GetMapping("/minus")
-    public Integer minus(@RequestParam Integer num1, @RequestParam Integer num2) {
+    public Long minus(@RequestParam Integer num1, @RequestParam Integer num2) {
         return calculatorService.subtract(num1, num2);
     }
 
     @GetMapping("/multiply")
-    public Integer multiply(@RequestParam Integer num1, @RequestParam Integer num2) {
+    public Long multiply(@RequestParam Integer num1, @RequestParam Integer num2) {
         return calculatorService.multiply(num1, num2);
     }
 
     @GetMapping("/divide")
-    public Integer divide(@RequestParam Integer num1, @RequestParam Integer num2) {
+    public Double divide(@RequestParam Integer num1, @RequestParam Integer num2) {
         return calculatorService.divide(num1, num2);
     }
 }
